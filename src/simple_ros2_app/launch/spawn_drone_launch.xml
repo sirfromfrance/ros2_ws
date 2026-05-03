@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="instance" default="0" />
+    <arg name="x" default="0.0"/>
+    <arg name="y" default="0.0"/>
+    
+    <!-- Нові аргументи, які приходять з multi_drone -->
+    <arg name="fcu_url" />
+    <arg name="tgt_system" />
+    
+    <let name="namespace" value="uav$(var instance)"/>
+    <let name="sdf_model" value="px4_iris$(var instance).sdf" />
+
+    <group>
+        <push-ros-namespace namespace="$(var namespace)"/>
+
+        <!-- 1. SITL PX4 -->
+        <include file="$(find-pkg-share simple_ros2_app)/launch/px4_launch.xml">
+            <arg name="instance" value="$(var instance)" />
+        </include>
+
+        <!-- 2. MAVROS -->
+        <include file="$(find-pkg-share simple_ros2_app)/launch/mavros_sitl_px4_node_launch.xml">
+            <arg name="fcu_url" value="$(var fcu_url)" />
+            <arg name="tgt_system" value="$(var tgt_system)" />
+        </include>
+
+        <!-- 3. Спавн моделі в Gazebo -->
+        <node pkg="gazebo_ros" exec="spawn_entity.py" name="spawn_entity" 
+              args="-entity $(var namespace) -file $(find-pkg-share simple_ros2_app)/models/$(var sdf_model) -x $(var x) -y $(var y) -z 0.5" 
+              output="log" />
+        
+        <!-- 4. Вузол керування -->
+        <node pkg="simple_ros2_app" exec="px4_control" name="companion_control" output="screen" />
+    </group>
+</launch>
