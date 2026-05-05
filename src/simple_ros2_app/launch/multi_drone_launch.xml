@@ -6,17 +6,11 @@
         <arg name="x" value="0.0"/>
         <arg name="y" value="0.0"/>
         <arg name="fcu_url" value="udp://:14540@127.0.0.1:14580"/>
-        <arg name="gcs_url" value="udp://@127.0.0.1:14550"/> <!-- Додано -->
+        <arg name="gcs_url" value="udp://@127.0.0.1:14550"/>
         <arg name="tgt_system" value="1"/>
    </include>
 
-
-    <!-- Центральний вузол Ground Control -->
-    <!-- <node pkg="simple_ros2_app" exec="ground_control" name="ground_control_node" output="screen" /> -->
-<!-- 
-
-
-    <include file="$(find-pkg-share simple_ros2_app)/launch/spawn_drone_launch.xml">
+   <include file="$(find-pkg-share simple_ros2_app)/launch/spawn_drone_launch.xml">
         <arg name="instance" value="1" />
         <arg name="x" value="2.0"/>
         <arg name="y" value="0.0"/>
@@ -25,12 +19,19 @@
         <arg name="tgt_system" value="2"/>
     </include>
 
-    Дрон 2
+
     <include file="$(find-pkg-share simple_ros2_app)/launch/spawn_drone_launch.xml">
         <arg name="instance" value="2" />
         <arg name="x" value="-2.0"/>
         <arg name="y" value="0.0"/>
         <arg name="fcu_url" value="udp://:14542@127.0.0.1:14582"/>
         <arg name="tgt_system" value="3"/>
-    </include> -->
+    </include> 
+
+
+    <node pkg="simple_ros2_app" exec="ground_control" name="ground_control_node" output="screen" /> 
+
+
+
+    
 </launch>
