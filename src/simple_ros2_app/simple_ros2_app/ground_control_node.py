@@ -60,11 +60,11 @@ class GroundControlNode(Node):
                 for i in range(len(self.drones)):
                     base_x = self.drones_position[i][0]
                     base_y = self.drones_position[i][1]                    
-                    self.send_waypoint(i, base_x, base_y, 10.0)
-                    self.send_waypoint(i, base_x + 50.0, base_y, 10.0)
-                    self.send_waypoint(i, base_x + 50.0, base_y + 50.0, 10.0)
-                    self.send_waypoint(i, base_x, base_y + 50.0, 10.0)
-                    self.send_waypoint(i, base_x, base_y, 10.0)             
+                    self.send_waypoint(i, base_x, base_y, 4.0)
+                    self.send_waypoint(i, base_x + 5.0, base_y, 4.0)
+                    self.send_waypoint(i, base_x + 500, base_y + 5.0, 5.0)
+                    self.send_waypoint(i, base_x, base_y + 5.0, 4.0)
+                    self.send_waypoint(i, base_x, base_y, 3.0)             
                     self.send_waypoint(i, base_x, base_y, 0.0)                                    
                 self.get_logger().info('mission started')
                 self.mission_state = 2
