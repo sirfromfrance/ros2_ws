@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<launch>
+    <node pkg="simple_ros2_app" exec="swarm_control" name="swarm_control" output="screen" />
+</launch>

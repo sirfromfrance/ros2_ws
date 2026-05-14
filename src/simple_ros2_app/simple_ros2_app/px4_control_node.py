@@ -43,6 +43,7 @@ class Control_Node(Node):
         self.takeoff_requested = False
         self.takeoff_state = 0
         self.takeoff_start_time = None
+        self.auto_takeoff_initiated = False
 
         self.loop_timer = self.create_timer(0.05, self.timer_callback)
 
@@ -89,17 +90,27 @@ class Control_Node(Node):
                 self.set_mode_client.call_async(mode_req)
 
     def waypoint_service_cb(self, request, response):
-        self.waypoints.append({'x': request.x, 'y': request.y, 'z': request.z})
+        # Очищаємо стару чергу і залишаємо лише нову актуальну точку
+        self.waypoints = [{'x': request.x, 'y': request.y, 'z': request.z}]
+        self.current_wp_index = 0
         
-        if not self.mission_active and self.current_wp_index < len(self.waypoints):
-            self.target_pose.pose.position.x = self.waypoints[self.current_wp_index]['x']
-            self.target_pose.pose.position.y = self.waypoints[self.current_wp_index]['y']
-            self.target_pose.pose.position.z = self.waypoints[self.current_wp_index]['z']
-            self.mission_active = True
+        # Одразу направляємо дрон туди (переписуємо ціль)
+        self.target_pose.pose.position.x = request.x
+        self.target_pose.pose.position.y = request.y
+        self.target_pose.pose.position.z = request.z
+        
+        self.mission_active = True
+        self.get_logger().info(f'Змінюю курс! Лечу на: X:{request.x}, Y:{request.y}, Z:{request.z}')
+        
+        # Якщо дрон долетів до попередньої точки і почав сідати (AUTO.LAND), 
+        # примусово повертаємо його в режим польоту (OFFBOARD)
+        mode_req = SetMode.Request()
+        mode_req.custom_mode = 'OFFBOARD'
+        self.set_mode_client.call_async(mode_req)
             
         response.success = True
         return response
-
+    
     def master_takeoff_cb(self, request, response):
         if not self.pose_ready:
             response.success = False
@@ -121,6 +132,17 @@ class Control_Node(Node):
         self.target_pose.header.stamp = self.get_clock().now().to_msg()
         self.target_pose.header.frame_id = 'map' 
         self.local_pos_pub.publish(self.target_pose)
+
+        if self.pose_ready and not self.auto_takeoff_initiated:
+            self.target_pose.pose.position.x = self.current_pose.pose.position.x
+            self.target_pose.pose.position.y = self.current_pose.pose.position.y
+            self.target_pose.pose.position.z = self.current_pose.pose.position.z
+            
+            self.takeoff_requested = True
+            self.takeoff_state = 0
+            self.takeoff_start_time = self.get_clock().now()
+            self.auto_takeoff_initiated = True
+            self.get_logger().info('Автоматичний зліт після завантаження системи!')
 
         if self.takeoff_requested and self.takeoff_start_time is not None:
             now = self.get_clock().now()

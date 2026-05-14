@@ -29,6 +29,8 @@ setup(
         'px4_control = simple_ros2_app.px4_control_node:main', 
         'ground_control = simple_ros2_app.ground_control_node:main',
         'mission = simple_ros2_app.simple_mission_node:main',
+        'swarm_control = simple_ros2_app.swarm_control_node:main',
+        'optical_flow = simple_ros2_app.optical_flow_node:main',
     ],
 },
 )

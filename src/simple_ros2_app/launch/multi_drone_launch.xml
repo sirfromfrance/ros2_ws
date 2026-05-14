@@ -27,11 +27,5 @@
         <arg name="fcu_url" value="udp://:14542@127.0.0.1:14582"/>
         <arg name="tgt_system" value="3"/>
     </include> 
-
-
-    <node pkg="simple_ros2_app" exec="ground_control" name="ground_control_node" output="screen" /> 
-
-
-
     
 </launch>

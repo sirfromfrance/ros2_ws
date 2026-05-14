@@ -9,11 +9,10 @@
     <let name="sdf_model" value="px4_iris$(var instance).sdf" />
     <group>
         <push-ros-namespace namespace="$(var namespace)"/>
-        <!-- 1. SITL PX4 -->
         <include file="$(find-pkg-share simple_ros2_app)/launch/px4_launch.xml">
             <arg name="instance" value="$(var instance)" />
         </include>
-        <!-- 2. MAVROS -->
+        
         <include file="$(find-pkg-share simple_ros2_app)/launch/mavros_sitl_px4_node_launch.xml">
             <arg name="fcu_url" value="$(var fcu_url)" />
             <arg name="tgt_system" value="$(var tgt_system)" />
@@ -24,5 +23,8 @@
               output="log" />
         
         <node pkg="simple_ros2_app" exec="px4_control" name="companion_control" output="screen" />
+
+        <node pkg="simple_ros2_app" exec="swarm_control" name="swarm_control" output="screen" />
+        <node pkg="simple_ros2_app" exec="optical_flow" name="optical_flow" output="screen" />
     </group>
 </launch>
