@@ -649,14 +649,15 @@
           <always_on>1</always_on>
           <update_rate>20</update_rate>
           <visualize>0</visualize>
-<!--          <plugin name="camera_controller" filename="libgazebo_ros_camera.so">-->
-<!--            <ros>-->
-<!--              <namespace>uav0</namespace>-->
-<!--            </ros>-->
-<!--            <camera_name>camera</camera_name>-->
-<!--            <frame_name>camera_link</frame_name>-->
-<!--            <hack_baseline>0.07</hack_baseline>-->
-<!--          </plugin>-->
+          <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+            <ros>
+              <namespace>/uav0</namespace>
+            </ros>
+            <camera_name>camera</camera_name>
+            <frame_name>camera_link</frame_name>
+            <hack_baseline>0.07</hack_baseline>
+          </plugin>
+          
           <plugin name="GstCameraPlugin" filename="libgazebo_gst_camera_plugin.so">
             <robotNamespace></robotNamespace>
             <udpPort>5600</udpPort>
@@ -675,47 +676,6 @@
           <lower>0</lower>
         </limit>
       </axis>
-    </joint>
-    <link name='camera_link'>
-      <pose>0.1 0 0.05 0 0 0</pose>
-      <inertial>
-        <mass>0.01</mass>
-        <inertia>
-          <ixx>1e-6</ixx><ixy>0</ixy><ixz>0</ixz>
-          <iyy>1e-6</iyy><iyz>0</iyz><izz>1e-6</izz>
-        </inertia>
-      </inertial>
-      <sensor name='camera' type='camera'>
-        <camera>
-          <horizontal_fov>1.047</horizontal_fov>
-          <image>
-            <width>640</width>
-            <height>480</height>
-          </image>
-          <clip><near>0.1</near><far>100</far></clip>
-        </camera>
-        <always_on>1</always_on>
-        <update_rate>30</update_rate>
-        <visualize>true</visualize>
-        
-        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
-          <alwaysOn>true</alwaysOn>
-          <updateRate>30.0</updateRate>
-          <cameraName>camera</cameraName>
-          <imageTopicName>image_raw</imageTopicName>
-          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-          <frameName>camera_link</frameName>
-        </plugin>
-        
-        <plugin name="GstCameraPlugin" filename="libgazebo_gst_camera_plugin.so">
-            <robotNamespace></robotNamespace>
-            <udpPort>5600</udpPort>
-        </plugin>
-      </sensor>
-    </link>
-    <joint name='camera_joint' type='fixed'>
-      <child>camera_link</child>
-      <parent>base_link</parent>
     </joint>
 
   </model>

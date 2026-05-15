@@ -90,23 +90,18 @@ class Control_Node(Node):
                 self.set_mode_client.call_async(mode_req)
 
     def waypoint_service_cb(self, request, response):
-        # Очищаємо стару чергу і залишаємо лише нову актуальну точку
-        self.waypoints = [{'x': request.x, 'y': request.y, 'z': request.z}]
-        self.current_wp_index = 0
+        self.waypoints.append({'x': request.x, 'y': request.y, 'z': request.z})
+        self.get_logger().info(f'Точку додано до маршруту: X:{request.x}, Y:{request.y}, Z:{request.z}')
         
-        # Одразу направляємо дрон туди (переписуємо ціль)
-        self.target_pose.pose.position.x = request.x
-        self.target_pose.pose.position.y = request.y
-        self.target_pose.pose.position.z = request.z
-        
-        self.mission_active = True
-        self.get_logger().info(f'Змінюю курс! Лечу на: X:{request.x}, Y:{request.y}, Z:{request.z}')
-        
-        # Якщо дрон долетів до попередньої точки і почав сідати (AUTO.LAND), 
-        # примусово повертаємо його в режим польоту (OFFBOARD)
-        mode_req = SetMode.Request()
-        mode_req.custom_mode = 'OFFBOARD'
-        self.set_mode_client.call_async(mode_req)
+        if not self.mission_active and self.current_wp_index < len(self.waypoints):
+            self.target_pose.pose.position.x = self.waypoints[self.current_wp_index]['x']
+            self.target_pose.pose.position.y = self.waypoints[self.current_wp_index]['y']
+            self.target_pose.pose.position.z = self.waypoints[self.current_wp_index]['z']
+            self.mission_active = True
+            
+            mode_req = SetMode.Request()
+            mode_req.custom_mode = 'OFFBOARD'
+            self.set_mode_client.call_async(mode_req)
             
         response.success = True
         return response

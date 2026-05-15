@@ -34,7 +34,7 @@ class SwarmControlNode(Node):
         if self.position_msg is None or msg.header.stamp.sec > self.position_msg.header.stamp.sec:
             self.position_msg = msg
             self.get_logger().info(
-                f'Отримано нову команду рою: x={msg.pose.position.x}, y={msg.pose.position.y}'
+                f'new command: x={msg.pose.position.x}, y={msg.pose.position.y}'
             )
             self.update_drone_flight_position()
 
