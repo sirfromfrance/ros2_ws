@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <launch>
-    <!-- Дрон 0 -->
     <include file="$(find-pkg-share simple_ros2_app)/launch/spawn_drone_launch.xml">
         <arg name="instance" value="0" />
         <arg name="x" value="0.0"/>
@@ -8,24 +7,18 @@
         <arg name="fcu_url" value="udp://:14540@127.0.0.1:14580"/>
         <arg name="gcs_url" value="udp://@127.0.0.1:14550"/>
         <arg name="tgt_system" value="1"/>
+        <arg name="sdf_model" value="px4_iris0_cam.sdf"/> 
    </include>
-   
+
    <include file="$(find-pkg-share simple_ros2_app)/launch/spawn_drone_launch.xml">
         <arg name="instance" value="1" />
-        <arg name="x" value="2.0"/>
+        <arg name="x" value="2.0"/> 
         <arg name="y" value="0.0"/>
         <arg name="fcu_url" value="udp://:14541@127.0.0.1:14581"/>
         <arg name="gcs_url" value="udp://@127.0.0.1:14551"/>
         <arg name="tgt_system" value="2"/>
+        <arg name="sdf_model" value="px4_iris1.sdf"/> 
     </include>
-
-
-    <include file="$(find-pkg-share simple_ros2_app)/launch/spawn_drone_launch.xml">
-        <arg name="instance" value="2" />
-        <arg name="x" value="-2.0"/>
-        <arg name="y" value="0.0"/>
-        <arg name="fcu_url" value="udp://:14542@127.0.0.1:14582"/>
-        <arg name="tgt_system" value="3"/>
-    </include>
-
+   
+   
 </launch>

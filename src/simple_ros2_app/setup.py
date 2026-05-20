@@ -25,12 +25,12 @@ setup(
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
-    'console_scripts': [
-        'px4_control = simple_ros2_app.px4_control_node:main', 
-        'ground_control = simple_ros2_app.ground_control_node:main',
-        'mission = simple_ros2_app.simple_mission_node:main',
-        'swarm_control = simple_ros2_app.swarm_control_node:main',
-        'optical_flow = simple_ros2_app.optical_flow_node:main',
-    ],
-},
+        'console_scripts': [
+            'px4_control_node = simple_ros2_app.px4_control_node:main',
+            'swarm_control_node = simple_ros2_app.swarm_control_node:main',
+            'optical_flow_node = simple_ros2_app.optical_flow_node:main',
+            'ai_tracker_node = simple_ros2_app.ai_tracking_node:main',
+            
+        ],
+    },
 )

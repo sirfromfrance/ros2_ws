@@ -4,11 +4,15 @@
     <arg name="x" default="0.0"/>
     <arg name="y" default="0.0"/>
     <arg name="fcu_url" />
+    <arg name="gcs_url" default="" /> 
     <arg name="tgt_system" />
+    <arg name="sdf_model" default="px4_iris$(var instance).sdf" /> 
+    
     <let name="namespace" value="uav$(var instance)"/>
-    <let name="sdf_model" value="px4_iris$(var instance).sdf" />
+    
     <group>
         <push-ros-namespace namespace="$(var namespace)"/>
+        
         <include file="$(find-pkg-share simple_ros2_app)/launch/px4_launch.xml">
             <arg name="instance" value="$(var instance)" />
         </include>
@@ -22,9 +26,12 @@
               args="-entity $(var namespace) -file $(find-pkg-share simple_ros2_app)/models/$(var sdf_model) -x $(var x) -y $(var y) -z 0.5" 
               output="log" />
         
-        <node pkg="simple_ros2_app" exec="px4_control" name="companion_control" output="screen" />
+        <node pkg="simple_ros2_app" exec="px4_control_node" name="companion_control" output="screen" />
+        <node pkg="simple_ros2_app" exec="swarm_control_node" name="swarm_control" output="screen" />
+        
+        <node pkg="simple_ros2_app" exec="ai_tracker_node" name="ai_tracking_node" output="screen" 
+              if="$(eval '\'$(var instance)\' == \'0\'')" />
 
-        <node pkg="simple_ros2_app" exec="swarm_control" name="swarm_control" output="screen" />
-        <node pkg="simple_ros2_app" exec="optical_flow" name="optical_flow" output="screen" />
+
     </group>
 </launch>

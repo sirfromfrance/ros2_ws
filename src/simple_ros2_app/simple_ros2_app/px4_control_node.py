@@ -151,20 +151,20 @@ class Control_Node(Node):
                 self.param_client.call_async(req2)
                 self.takeoff_state = 1
 
-            elif self.takeoff_state == 1 and elapsed > 2.0:
+            elif self.takeoff_state == 1 and elapsed > 1.0:
                 mode_req = SetMode.Request()
                 mode_req.custom_mode = 'OFFBOARD'
                 self.set_mode_client.call_async(mode_req)
                 self.takeoff_state = 2
 
-            elif self.takeoff_state == 2 and elapsed > 4.0:
+            elif self.takeoff_state == 2 and elapsed > 2.0:
                 arm_req = CommandBool.Request()
                 arm_req.value = True
                 self.arming_client.call_async(arm_req)
                 self.takeoff_state = 3
             
-            elif self.takeoff_state == 3 and elapsed > 6.0:
-                self.target_pose.pose.position.z = self.current_pose.pose.position.z + 8.0
+            elif self.takeoff_state == 3 and elapsed > 5.0:
+                self.target_pose.pose.position.z = self.current_pose.pose.position.z + 1.0
                 self.takeoff_state = 4
                 self.takeoff_requested = False
                 self.get_logger().info('Зліт ініційовано!')
